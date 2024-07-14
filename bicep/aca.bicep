@@ -6,9 +6,13 @@ param prefix string
 @description('Azure Container Apps Workspace Id for the container app')
 param workspaceId string
 
+@description('Tags for all resources')
+param tags object = {}
+
 resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
   name: '${prefix}-containerapp'
   location: resourceGroup().location
+  tags: tags
   properties: {
     configuration: {
       ingress: {

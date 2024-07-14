@@ -3,9 +3,13 @@
 @description('Prefix for all resources')
 param prefix string
 
+@description('Tags for all resources')
+param tags object = {}
+
 resource aca_workspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: '${prefix}-aca-workspace'
   location: resourceGroup().location
+  tags: tags
   properties: {
     sku: {
       name: 'PerGB2018'

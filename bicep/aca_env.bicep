@@ -4,6 +4,9 @@
 @description('Prefix for all resources')
 param prefix string
 
+@description('Tags for all resources')
+param tags object = {}
+
 @description('Log Analytics Workspace for the container app')
 param logAnalyticsWorkspaceId string
 
@@ -13,6 +16,7 @@ param logAnalyticsSharedKey string
 resource aca_env 'Microsoft.App/managedEnvironments@2024-03-01' = {
   name: '${prefix}-aca-env'
   location: resourceGroup().location
+  tags: tags
   properties: {
     appLogsConfiguration: {
       destination: 'log-analytics'
