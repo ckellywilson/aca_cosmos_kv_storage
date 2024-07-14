@@ -1,6 +1,6 @@
 @contextdiagram_HostAddress = http://localhost:5081
 
-GET {{contextdiagram_HostAddress}}/weatherforecast/
+GET {{contextdiagram_HostAddress}}/contextdiagrams/
 Accept: application/json
 
 ###

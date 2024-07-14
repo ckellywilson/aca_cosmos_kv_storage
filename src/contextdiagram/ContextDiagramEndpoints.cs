@@ -6,13 +6,21 @@ public static class ContextDiagramEndpoints
 {
     public static void RegisterEndpoints(this WebApplication endpoints)
     {
-        endpoints.MapGet("/contextdiagrams{id}", GetContextDiagram);
+        endpoints.MapGet("/contextdiagrams/{id}", GetContextDiagram);
     }
 
-    private static async Task<Results<Ok<ContextDiagram>, NotFound>> GetContextDiagram(string id, IContextDiagramService service) =>
+    private static async Task<Results<Ok<ContextDiagram>, NotFound>> GetContextDiagram(string id, IContextDiagramService service)
+    {
+        try
+        {
+            var contextDiagram = await service.GetContextDiagramAsync(id);
+            return TypedResults.Ok(contextDiagram);
+        }
+        catch (KeyNotFoundException)
+        {
+            return TypedResults.NotFound();
+        }
+    }
 
-        await service.GetContextDiagramAsync(id)
-        is ContextDiagram contextDiagram
-        ? TypedResults.Ok(contextDiagram) :
-        TypedResults.NotFound();
+
 }
