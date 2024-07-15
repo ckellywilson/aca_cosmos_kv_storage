@@ -1,21 +1,35 @@
 #!/bin/bash
 
-imageName="contextDiagram"
+# Set the Docker image name
+echo "Set the Docker image name"
+imageName='contextdiagram'
+echo "Docker image name: $imageName"
 
 # Login to Azure
+echo "Login to Azure"
 az login --use-device-code
 
 # Set the Azure Container Registry details
+echo "Set the Azure Container Registry name"
 acr_name=$(az resource list --query "[?tags.environment=='ecolab-aca' && type=='Microsoft.ContainerRegistry/registries'].name" --output tsv)
+echo "Azure Container Registry name: $acr_name"
 
 # Login to Azure Container Registry
+echo "Login to Azure Container Registry"
 az acr login --name $acr_name
 
 # Build and tag the Docker image
-docker build -t $image_name .
+echo "Build and tag the Docker image"
+docker build -t $imageName .
+image_name=$(docker images -q $imageName)
+echo "Docker image ID: $image_name"
 
 # Tag the Docker image with the Azure Container Registry URL
-docker tag $image_name $acr_name.azurecr.io/$imageName:latest
+echo "Tag the Docker image with the Azure Container Registry URL"
+docker tag $image_name:latest $acr_name.azurecr.io/$imageName:latest
+echo "Docker image tagged with Azure Container Registry URL"
 
 # Push the Docker image to Azure Container Registry
+echo "Push the Docker image to Azure Container Registry"
 docker push $acr_name.azurecr.io/$imageName:latest
+echo "Docker image pushed to Azure Container Registry"
