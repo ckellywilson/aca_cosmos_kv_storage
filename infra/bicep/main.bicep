@@ -15,6 +15,15 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   tags: tags
 }
 
+module appInsights './appInsights.bicep' = {
+  name: '${prefix}-appinsights'
+  scope: rg
+  params: {
+    prefix: prefix
+    tags: tags
+  }
+}
+
 module acr './acr.bicep' = {
   name: '${prefix}-acr'
   scope: rg
