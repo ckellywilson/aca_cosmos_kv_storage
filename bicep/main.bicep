@@ -52,5 +52,7 @@ module cosmosdb './aca_cosmosdb.bicep' = {
     prefix: prefix
     tags: tags
     location: location
+    databaseName: 'Context'
+    containerName: 'ContextDiagram'
   }
 }
