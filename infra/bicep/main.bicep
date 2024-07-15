@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
 // parameters
-param prefix string=''
+param prefix string = ''
 param location string = ''
 param tags object = {}
 
@@ -20,6 +20,38 @@ module appInsights './appInsights.bicep' = {
   scope: rg
   params: {
     prefix: prefix
+    tags: tags
+  }
+}
+
+module storage './storage.bicep' = {
+  name: '${prefix}-storage'
+  scope: rg
+  params: {
+    storageAccountName: 'ecolabacasa'
+    accountType: 'Standard_LRS'
+    kind: 'StorageV2'
+    minimumTlsVersion: 'TLS1_2'
+    supportsHttpsTrafficOnly: false
+    allowBlobPublicAccess: false
+    allowSharedKeyAccess: true
+    defaultOAuth: false
+    accessTier: 'Cool'
+    publicNetworkAccess: 'Enabled'
+    allowCrossTenantReplication: false
+    networkAclsBypass: 'AzureServices'
+    networkAclsDefaultAction: 'Allow'
+    dnsEndpointType: 'Standard'
+    largeFileSharesState: 'Enabled'
+    keySource: 'Microsoft.Storage'
+    encryptionEnabled: true
+    infrastructureEncryptionEnabled: false
+    isBlobSoftDeleteEnabled: true
+    blobSoftDeleteRetentionDays: 7
+    isContainerSoftDeleteEnabled: true
+    containerSoftDeleteRetentionDays: 7
+    isShareSoftDeleteEnabled: true
+    shareSoftDeleteRetentionDays: 7
     tags: tags
   }
 }
