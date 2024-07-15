@@ -12,8 +12,11 @@ param tags object = {}
 @description('User-assigned identity for the container app')
 param identityId string
 
+@description('Azure Container Registry for the container app')
+param azureContainerRegistry string
+
 resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
-  name: '${prefix}-containerapp'
+  name: '${prefix}-contextdiagram'
   location: resourceGroup().location
   identity: {
     type: 'UserAssigned'
@@ -26,15 +29,27 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
     configuration: {
       ingress: {
         external: true
-        targetPort: 80
+        targetPort: 5081
       }
+      registries: [
+        {
+          server: '${azureContainerRegistry}.azurecr.io'
+          identity: identityId
+        }
+      ]
     }
     environmentId: workspaceId
     template: {
       containers: [
         {
-          name: 'helloworld'
-          image: 'mcr.microsoft.com/k8se/quickstart:latest'
+          name: 'contextdiagram'
+          image: 'acr4eemppzyag4po.azurecr.io/contextdiagram:latest'
+          env: [
+            {
+              name: 'COSMOS_CONNECTION_STRING'
+              value: 'AccountEndpoint=https://ecolab-aca-cosmos.documents.azure.com:443/;AccountKey=ECrVFmfDAG7xtzxdrOeCwe3WSY70sTR4BE4cHQcmAzk4IwmcuhSdPqSL8mpyfiAk3B1m09DG8KknACDbEQz1rg==;'
+            }
+          ]
           resources: {
             cpu: json('0.25')
             memory: '0.5Gi'

@@ -7,7 +7,7 @@ param tags object = {}
 
 // variables
 var resourceGroupName = '${prefix}-rg'
-var containerAppName = '${prefix}-aca'
+var containerAppContextDiagram = '${prefix}-aca-contextdiagram'
 
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: resourceGroupName
@@ -63,14 +63,15 @@ module aca_env './aca_env.bicep' = {
   }
 }
 
-module aca './aca.bicep' = {
-  name: containerAppName
+module aca_contextdiagram './aca_contextdiagram.bicep' = {
+  name: containerAppContextDiagram
   scope: rg
   params: {
     prefix: prefix
     workspaceId: aca_env.outputs.environmentId
     tags: tags
     identityId: user_identity.outputs.identityId
+    azureContainerRegistry: acr.outputs.acrName
   }
 }
 
