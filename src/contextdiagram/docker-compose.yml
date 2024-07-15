@@ -1,0 +1,15 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  contextdiagram:
+    image: contextdiagram
+    container_name: contextdiagram-prod
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 5081:5081
+    environment:      
+      - COSMOS_CONNECTION_STRING=AccountEndpoint=https://ecolab-aca-cosmos.documents.azure.com:443/;AccountKey=ECrVFmfDAG7xtzxdrOeCwe3WSY70sTR4BE4cHQcmAzk4IwmcuhSdPqSL8mpyfiAk3B1m09DG8KknACDbEQz1rg==;
