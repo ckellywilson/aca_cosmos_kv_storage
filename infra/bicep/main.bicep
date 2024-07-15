@@ -15,6 +15,34 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   tags: tags
 }
 
+module acr './acr.bicep' = {
+  name: '${prefix}-acr'
+  scope: rg
+  params: {
+    location: location
+    tags: tags
+  }
+}
+
+module user_identity './user_identity.bicep' = {
+  name: '${prefix}-identity'
+  scope: rg
+  params: {
+    prefix: prefix
+    tags: tags
+  }
+}
+
+module user_identity_acr_roleassignment './user_identity_acr_roleassignment.bicep' = {
+  name: '${prefix}-acr-roleassignment'
+  scope: rg
+  params: {
+    azureContainerRegistry: acr.outputs.acrName
+    acrPullDefinitionId: '7f951dda-4ed3-4680-a7ca-43fe172d538d'
+    principalId: user_identity.outputs.principalId
+  }
+}
+
 module aca_wp './aca_wp.bicep' = {
   name: '${prefix}-aca-wp'
   scope: rg
@@ -42,10 +70,11 @@ module aca './aca.bicep' = {
     prefix: prefix
     workspaceId: aca_env.outputs.environmentId
     tags: tags
+    identityId: user_identity.outputs.identityId
   }
 }
 
-module cosmosdb './aca_cosmosdb.bicep' = {
+module cosmosdb './cosmosdb.bicep' = {
   name: '${prefix}-cosmosdb'
   scope: rg
   params: {

@@ -9,9 +9,18 @@ param workspaceId string
 @description('Tags for all resources')
 param tags object = {}
 
+@description('User-assigned identity for the container app')
+param identityId string
+
 resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
   name: '${prefix}-containerapp'
   location: resourceGroup().location
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${identityId}': {}
+    }
+  }
   tags: tags
   properties: {
     configuration: {
