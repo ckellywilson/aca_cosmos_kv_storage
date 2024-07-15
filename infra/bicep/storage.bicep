@@ -99,3 +99,5 @@ resource Microsoft_Storage_storageAccounts_fileservices_storageAccountName_defau
     storageAccountName_default
   ]
 }
+
+output storageAccountName string = storageAccount.name
