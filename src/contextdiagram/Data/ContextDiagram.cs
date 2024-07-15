@@ -1,6 +1,8 @@
 public class ContextDiagram
 {
-    public string Id { get; set; } = default!;
+    public string? id { get; set; }
 
-    public string Name { get; set; } = default!;
+    public string? name { get; set; }
+
+    public string? category { get; set; }
 }

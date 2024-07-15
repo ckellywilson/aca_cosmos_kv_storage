@@ -1,30 +1,48 @@
-using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
+using contextdiagram.Exceptions;
+using Microsoft.Azure.Cosmos;
 
-namespace YourNamespace
+namespace contextdiagram.Services
 {
     public class ContextDiagramCosmosService : IContextDiagramService
     {
-        readonly IEnumerable<ContextDiagram>? _contextDiagrams;
+        CosmosClient _client;
+        readonly string _database = "Context";
+        readonly string _container = "ContextDiagram";
 
-        public ContextDiagramCosmosService()
+        public ContextDiagramCosmosService(CosmosClient client)
         {
-            _contextDiagrams =
-            [
-                new ContextDiagram { Id = "1", Name = "Context Diagram 1" },
-                new ContextDiagram { Id = "2", Name = "Context Diagram 2" },
-                new ContextDiagram { Id = "3", Name = "Context Diagram 3" }
-            ];
+            _client = client;
+        }
+
+        public async Task AddContextDiagramAsync(ContextDiagram contextDiagram)
+        {
+            var container = _client.GetContainer(_database, _container);
+            try
+            {
+                await container.CreateItemAsync(contextDiagram, new PartitionKey(contextDiagram.id));
+            }
+            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                throw new ConflictException("id already exists");
+            }
+            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("id is required");
+            }
         }
 
         public async Task<ContextDiagram> GetContextDiagramAsync(string id)
         {
-            return await Task.Run<ContextDiagram>(() =>
+            var container = _client.GetContainer(_database, _container);
+            try
             {
-                return _contextDiagrams?.FirstOrDefault(cd => cd.Id == id) ?? throw new KeyNotFoundException();
-            });
+                var response = await container.ReadItemAsync<ContextDiagram>(id, new PartitionKey(id));
+                return response.Resource;
+            }
+            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException();
+            }
         }
     }
 }

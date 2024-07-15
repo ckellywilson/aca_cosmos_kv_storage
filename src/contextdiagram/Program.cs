@@ -1,4 +1,5 @@
-using YourNamespace;
+using contextdiagram.Services;
+using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IContextDiagramService, ContextDiagramCosmosService>();
+builder.Services.AddSingleton<CosmosClient>(new CosmosClient(Environment.GetEnvironmentVariable("COSMOS_CONNECTION_STRING")));
 
 var app = builder.Build();
 
