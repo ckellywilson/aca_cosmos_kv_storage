@@ -17,7 +17,13 @@ builder.Services.AddSingleton<BlobServiceClient>(x =>
 
     return new BlobServiceClient(new Uri(blobContainerUrl), new DefaultAzureCredential());
 });
-builder.Services.AddSingleton<IBlobStorageService, AzureBlobStoreService>();
+builder.Services.AddTransient<IBlobStorageService, AzureBlobStoreService>();
+
+// set Application Insights telemetry
+if (Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING") != null)
+{
+    builder.Services.AddApplicationInsightsTelemetry();
+}
 
 
 var app = builder.Build();
