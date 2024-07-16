@@ -20,7 +20,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"ms-dotnettools.vscodeintellicode-csharp"
+				"ms-dotnettools.vscodeintellicode-csharp",
+				"GitHub.copilot"
 			]
 		}
 	}
