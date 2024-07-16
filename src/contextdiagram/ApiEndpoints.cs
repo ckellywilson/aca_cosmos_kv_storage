@@ -4,7 +4,7 @@ using contextdiagram.Exceptions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Azure.Cosmos;
 
-public static class ContextDiagramEndpoints
+public static class ApiEndpoints
 {
     public static void RegisterEndpoints(this WebApplication endpoints)
     {
