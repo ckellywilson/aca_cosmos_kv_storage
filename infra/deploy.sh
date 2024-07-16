@@ -19,4 +19,5 @@ az deployment sub create --name $deploymentName \
     --location $location \
     --parameters ./bicep/main.bicepparam
     --parameters prefix="$prefix" \
+    --parameters adminUserId="$adminUserId" \
     --template-file ./bicep/main.bicep

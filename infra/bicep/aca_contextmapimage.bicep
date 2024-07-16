@@ -37,6 +37,11 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
           identity: identityId
         }
       ]
+      secrets: [
+        {
+            name: 'azure-client-secret'
+            value: 'NhZ8Q~FOxue5PD3Z2RWcr3xUSIa0l4JwQGolYdp8'
+        }]
     }
     environmentId: workspaceId
     template: {
@@ -59,7 +64,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
             }
             {
               name: 'AZURE_CLIENT_SECRET'
-              value: 'NhZ8Q~FOxue5PD3Z2RWcr3xUSIa0l4JwQGolYdp8'
+              secretRef: 'azure-client-secret'
             }
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'

@@ -12,6 +12,9 @@ param tags object = {}
 @description('User-assigned identity for the container app')
 param identityId string
 
+@description('User Manged Identity Id')
+param userManagedIdentityId string
+
 @description('Azure Container Registry for the container app')
 param azureContainerRegistry string
 
@@ -37,6 +40,12 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
           identity: identityId
         }
       ]
+      secrets: [
+        {
+          name: 'cosmosconnectionstring'
+          value: 'AccountEndpoint=https://ecolab-aca-cosmos.documents.azure.com:443/;AccountKey=ECrVFmfDAG7xtzxdrOeCwe3WSY70sTR4BE4cHQcmAzk4IwmcuhSdPqSL8mpyfiAk3B1m09DG8KknACDbEQz1rg==;'
+        }
+      ]
     }
     environmentId: workspaceId
     template: {
@@ -47,12 +56,12 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
           env: [
             {
               name: 'COSMOS_CONNECTION_STRING'
-              value: 'AccountEndpoint=https://ecolab-aca-cosmos.documents.azure.com:443/;AccountKey=ECrVFmfDAG7xtzxdrOeCwe3WSY70sTR4BE4cHQcmAzk4IwmcuhSdPqSL8mpyfiAk3B1m09DG8KknACDbEQz1rg==;'
+              secretRef: 'cosmosconnectionstring'
             }
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
               value: 'InstrumentationKey=8473fbb9-1de0-4a50-91b2-79b2ace42063;IngestionEndpoint=https://centralus-3.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/;ApplicationId=3f480e9d-6f66-481d-b9d7-627ff8161994'
-            }            
+            }
           ]
           resources: {
             cpu: json('0.25')

@@ -1,13 +1,13 @@
 targetScope = 'subscription'
 
 // parameters
+param adminUserId string
 param prefix string = ''
 param location string = ''
 param tags object = {}
 
 // variables
 var resourceGroupName = '${prefix}-rg'
-var containerAppContextDiagram = '${prefix}-aca-contextdiagram'
 
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: resourceGroupName
@@ -133,6 +133,7 @@ module aca_contextdiagram './aca_contextdiagram.bicep' = {
     tags: tags
     identityId: user_identity.outputs.identityId
     azureContainerRegistry: acr.outputs.acrName
+    userManagedIdentityId: user_identity.outputs.clientId
   }
 }
 
@@ -157,5 +158,16 @@ module cosmosdb './cosmosdb.bicep' = {
     location: location
     databaseName: 'Context'
     containerName: 'ContextDiagram'
+  }
+}
+
+module keyvault './keyvault.bicep' = {
+  name: '${prefix}keyvault'
+  scope: rg
+  params: {
+    keyVaultName: 'ecoacakeyvault092899'
+    tags: tags
+    adminUserId: adminUserId
+    mangedIdentityId: user_identity.outputs.principalId
   }
 }
