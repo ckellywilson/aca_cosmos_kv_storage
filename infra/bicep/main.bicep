@@ -125,7 +125,19 @@ module aca_env './aca_env.bicep' = {
 }
 
 module aca_contextdiagram './aca_contextdiagram.bicep' = {
-  name: containerAppContextDiagram
+  name: '${prefix}-aca-contextdiagram'
+  scope: rg
+  params: {
+    prefix: prefix
+    workspaceId: aca_env.outputs.environmentId
+    tags: tags
+    identityId: user_identity.outputs.identityId
+    azureContainerRegistry: acr.outputs.acrName
+  }
+}
+
+module aca_contextmapimage './aca_contextmapimage.bicep' = {
+  name: '${prefix}-aca-contextmapimage'
   scope: rg
   params: {
     prefix: prefix
