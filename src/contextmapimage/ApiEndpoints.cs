@@ -11,8 +11,13 @@ public static class ApiEndpoints
             return Results.Ok("Healthy");
         });
 
-        endpoints.MapPost("/api/Containers", async ([FromServices] IBlobStorageService blobStorageService, [FromBody] string containerName) =>
+        endpoints.MapPost("/api/containers", async ([FromServices] IBlobStorageService blobStorageService, [FromBody] string containerName) =>
         {
+            if (string.IsNullOrWhiteSpace(containerName))
+            {
+                return Results.BadRequest("Container name is null or empty");
+            }
+
             var result = await blobStorageService.CreateContainerAsync(containerName);
 
             if (result)
@@ -23,8 +28,16 @@ public static class ApiEndpoints
             return Results.BadRequest("Container creation failed");
         });
 
-        endpoints.MapPost("/api/Blobs", async ([FromServices] IBlobStorageService blobStorageService, [FromForm] IFormFile file) =>
+        endpoints.MapPost("/api/blobs",
+        async ([FromServices] IBlobStorageService blobStorageService,
+        [FromForm] string containerName,
+        [FromForm] IFormFile file) =>
         {
+            if (string.IsNullOrWhiteSpace(containerName))
+            {
+                return Results.BadRequest("Container name is null or empty");
+            }
+
             if (file is null)
             {
                 return Results.BadRequest("File is null");
@@ -40,7 +53,6 @@ public static class ApiEndpoints
             await file.CopyToAsync(content);
             content.Position = 0;
 
-            var containerName = "contextmapimage";
             var result = await blobStorageService.UploadBlobAsync(containerName, blobName, content);
 
             if (result)

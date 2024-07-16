@@ -12,8 +12,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<BlobServiceClient>(x =>
 {
-    string blobContainerUrl = Environment.GetEnvironmentVariable("BLOB_STORE_URL") ??
-            throw new ArgumentNullException("BLOB_STORE_URL is not set");
+    string blobContainerUrl = Environment.GetEnvironmentVariable("BLOB_STORAGE_URL") ??
+            throw new ArgumentNullException("BLOB_STORAGE_URL is not set");
 
     return new BlobServiceClient(new Uri(blobContainerUrl), new DefaultAzureCredential());
 });
