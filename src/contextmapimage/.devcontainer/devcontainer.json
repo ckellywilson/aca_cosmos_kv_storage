@@ -10,11 +10,10 @@
 			"version": "latest"
 		},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"installDockerBuildx": false,
+			"installDockerComposeSwitch": true,
 			"version": "latest",
-			"moby": "false",
-			"dockerDashComposeVersion": "latest",
-			"installDockerBuildx": "false",
-			"installDockerComposeSwitch": "true"
+			"dockerDashComposeVersion": "latest"
 		}
 	},
 	"customizations": {

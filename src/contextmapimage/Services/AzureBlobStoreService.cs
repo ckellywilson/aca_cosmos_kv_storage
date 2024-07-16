@@ -31,6 +31,11 @@ public class AzureBlobStoreService : IBlobStorageService
         }
         catch (RequestFailedException ex)
         {
+            if (!string.IsNullOrEmpty(ex.ErrorCode) && ex.ErrorCode == "ContainerAlreadyExists")
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -43,10 +48,10 @@ public class AzureBlobStoreService : IBlobStorageService
             {"contextdiagramid",blobName},
             {"category","Flow"}
         };
-        
+
         try
         {
-            BlobContainerClient containerClient = null;
+            BlobContainerClient containerClient;
 
             try
             {
@@ -58,6 +63,10 @@ public class AzureBlobStoreService : IBlobStorageService
             }
             catch (RequestFailedException ex)
             {
+                if (!string.IsNullOrEmpty(ex.ErrorCode) && ex.ErrorCode == "ContainerAlreadyExists")
+                {
+                    return true;
+                }
                 return false;
             }
 
