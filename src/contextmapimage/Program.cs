@@ -1,4 +1,7 @@
+using Azure.Identity;
+using Azure.Storage.Blobs;
 using contextmapimage;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<BlobServiceClient>(x =>
+{
+    string blobContainerUrl = Environment.GetEnvironmentVariable("BLOB_STORE_URL") ??
+            throw new ArgumentNullException("BLOB_STORE_URL is not set");
+
+    return new BlobServiceClient(new Uri(blobContainerUrl), new DefaultAzureCredential());
+});
+builder.Services.AddSingleton<IBlobStorageService, AzureBlobStoreService>();
+
 
 var app = builder.Build();
 
@@ -17,7 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
-     
+
 //register the endpoints
 app.RegisterEndpoints();
 

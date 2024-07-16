@@ -1,6 +1,9 @@
 @contextmapimage_HostAddress = http://localhost:5125
 
-GET {{contextmapimage_HostAddress}}/weatherforecast/
+POST {{contextmapimage_HostAddress}}/blobs/
+Accept: application/json
+
+GET {{contextmapimage_HostAddress}}/containers/
 Accept: application/json
 
 ###
