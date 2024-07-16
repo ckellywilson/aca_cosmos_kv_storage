@@ -84,12 +84,22 @@ module user_identity_acr_roleassignment './user_identity_acr_roleassignment.bice
   }
 }
 
-module user_identity_storage_roleassignment './user_identity_storage_roleassignment.bicep' = {
+module user_identity_storage_container_roleassignment './user_identity_storage_container_roleassignment.bicep' = {
   name: '${prefix}-storage-roleassignment'
   scope: rg
   params: {
     storageAccountName: storage.outputs.storageAccountName
     storageAccountContributorDefinitionId: '17d1049b-9a84-46fb-8f53-869881c3d3ab'
+    principalId: user_identity.outputs.principalId
+  }
+}
+
+module user_identity_storage_blob_roleassignment './user_identity_storage_blob_roleassignment.bicep' = {
+  name: '${prefix}-storage-blob-roleassignment'
+  scope: rg
+  params: {
+    storageAccountName: storage.outputs.storageAccountName
+    storageBlobDataContributorDefinitionId: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
     principalId: user_identity.outputs.principalId
   }
 }
