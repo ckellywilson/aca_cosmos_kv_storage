@@ -14,9 +14,9 @@ services:
     ports:
       - 5125:5125
     environment:
-    - "AZURE_CLIENT_ID=d119f74e-d4ca-4267-bf89-03ef71c84e12"
-    - "AZURE_TENANT_ID=93366ed2-d3b1-450b-9a7a-97c613864bad"
-    - "AZURE_CLIENT_SECRET=NhZ8Q~FOxue5PD3Z2RWcr3xUSIa0l4JwQGolYdp8"
-    - "BLOB_STORAGE_URL=https://ecolabacasa.blob.core.windows.net"
+    - "AZURE_CLIENT_ID=<your_client_id>"
+    - "AZURE_TENANT_ID=<your_tenant_id>"
+    - "AZURE_CLIENT_SECRET=<your_secret>"
+    - "BLOB_STORAGE_URL=<your_blob_storage_url>"
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
