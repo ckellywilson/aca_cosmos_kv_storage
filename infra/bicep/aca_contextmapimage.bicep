@@ -40,7 +40,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
       secrets: [
         {
             name: 'azure-client-secret'
-            value: 'NhZ8Q~FOxue5PD3Z2RWcr3xUSIa0l4JwQGolYdp8'
+            value: '<your-client-secret>'
         }]
     }
     environmentId: workspaceId
@@ -48,19 +48,19 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
       containers: [
         {
           name: 'contextmapimage'
-          image: 'acr4eemppzyag4po.azurecr.io/contextmapimage:latest'
+          image: '<your-image>'
           env: [
             {
               name: 'BLOB_STORAGE_URL'
-              value: 'https://ecolabacasa.blob.core.windows.net'
+              value: '<your-blob-storage-url>'
             }
             {
               name: 'AZURE_CLIENT_ID'
-              value: 'd119f74e-d4ca-4267-bf89-03ef71c84e12'
+              value: '<your-client-id>'
             }
             {
               name: 'AZURE_TENANT_ID'
-              value: '93366ed2-d3b1-450b-9a7a-97c613864bad'
+              value: '<your-tenant-id>'
             }
             {
               name: 'AZURE_CLIENT_SECRET'
@@ -68,7 +68,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
             }
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-              value: 'InstrumentationKey=8473fbb9-1de0-4a50-91b2-79b2ace42063;IngestionEndpoint=https://centralus-3.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/;ApplicationId=3f480e9d-6f66-481d-b9d7-627ff8161994'
+              value: '<your-app-insights-connection-string>'
             }
           ]
           resources: {

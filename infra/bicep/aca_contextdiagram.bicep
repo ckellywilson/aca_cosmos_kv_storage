@@ -43,7 +43,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
       secrets: [
         {
           name: 'cosmosconnectionstring'
-          value: 'AccountEndpoint=https://ecolab-aca-cosmos.documents.azure.com:443/;AccountKey=ECrVFmfDAG7xtzxdrOeCwe3WSY70sTR4BE4cHQcmAzk4IwmcuhSdPqSL8mpyfiAk3B1m09DG8KknACDbEQz1rg==;'
+          value: '<your-cosmos-connection-string>'
         }
       ]
     }
@@ -52,7 +52,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
       containers: [
         {
           name: 'contextdiagram'
-          image: 'acr4eemppzyag4po.azurecr.io/contextdiagram:latest'
+          image: '<your-image>'
           env: [
             {
               name: 'COSMOS_CONNECTION_STRING'
@@ -60,7 +60,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
             }
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-              value: 'InstrumentationKey=8473fbb9-1de0-4a50-91b2-79b2ace42063;IngestionEndpoint=https://centralus-3.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/;ApplicationId=3f480e9d-6f66-481d-b9d7-627ff8161994'
+              value: '<your-application-insights-connection-string>'
             }
           ]
           resources: {
