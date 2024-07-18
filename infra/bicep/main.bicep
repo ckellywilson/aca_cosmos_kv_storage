@@ -28,7 +28,7 @@ module storage './storage.bicep' = {
   name: '${prefix}-storage'
   scope: rg
   params: {
-    storageAccountName: 'ecolabacasa'
+    storageAccountName: '${prefix}sa${uniqueString(resourceGroupName)}'
     accountType: 'Standard_LRS'
     kind: 'StorageV2'
     minimumTlsVersion: 'TLS1_2'
@@ -124,30 +124,32 @@ module aca_env './aca_env.bicep' = {
   }
 }
 
-module aca_contextdiagram './aca_contextdiagram.bicep' = {
-  name: '${prefix}-aca-contextdiagram'
-  scope: rg
-  params: {
-    prefix: prefix
-    workspaceId: aca_env.outputs.environmentId
-    tags: tags
-    identityId: user_identity.outputs.identityId
-    azureContainerRegistry: acr.outputs.acrName
-    userManagedIdentityId: user_identity.outputs.clientId
-  }
-}
+// THIS IMAGE WILL BE DEPLOYED FROM THE APPLICATION REPOSITORY
+// module aca_contextdiagram './aca_contextdiagram.bicep' = {
+//   name: '${prefix}-aca-contextdiagram'
+//   scope: rg
+//   params: {
+//     prefix: prefix
+//     workspaceId: aca_env.outputs.environmentId
+//     tags: tags
+//     identityId: user_identity.outputs.identityId
+//     azureContainerRegistry: acr.outputs.acrName
+//     userManagedIdentityId: user_identity.outputs.clientId
+//   }
+// }
 
-module aca_contextmapimage './aca_contextmapimage.bicep' = {
-  name: '${prefix}-aca-contextmapimage'
-  scope: rg
-  params: {
-    prefix: prefix
-    workspaceId: aca_env.outputs.environmentId
-    tags: tags
-    identityId: user_identity.outputs.identityId
-    azureContainerRegistry: acr.outputs.acrName
-  }
-}
+// THIS IMAGE WILL BE DEPLOYED FROM THE APPLICATION REPOSITORY
+// module aca_contextmapimage './aca_contextmapimage.bicep' = {
+//   name: '${prefix}-aca-contextmapimage'
+//   scope: rg
+//   params: {
+//     prefix: prefix
+//     workspaceId: aca_env.outputs.environmentId
+//     tags: tags
+//     identityId: user_identity.outputs.identityId
+//     azureContainerRegistry: acr.outputs.acrName
+//   }
+// }
 
 module cosmosdb './cosmosdb.bicep' = {
   name: '${prefix}-cosmosdb'
@@ -167,7 +169,28 @@ module keyvault './keyvault.bicep' = {
   params: {
     keyVaultName: 'ecoacakeyvault092899'
     tags: tags
-    adminUserId: adminUserId
     mangedIdentityId: user_identity.outputs.principalId
   }
 }
+
+// resource general outputs
+output rgName string = rg.name
+output storageAccountName string = storage.outputs.storageAccountName
+output acrName string = acr.outputs.acrName
+output keyVaultName string = keyvault.outputs.keyVaultName
+output cosmosDbName string = cosmosdb.outputs.dbName
+
+// App Insights outputs
+output appInsightsId string = appInsights.outputs.appInsightsId
+output appInsightsName string = appInsights.outputs.appInsightsName
+output appInsightsInstrumentationKey string = appInsights.outputs.appInsightsInstrumentationKey
+output appInsightsConnectionString string = appInsights.outputs.appInsightsConnectionString
+
+// Cosmos DB outputs
+output cosmosContainerName string = cosmosdb.outputs.containerName
+output cosmosDbEndpoint string = cosmosdb.outputs.endpoint
+output cosmosPrimaryConnectionString string = cosmosdb.outputs.primaryConnectionString
+
+// Key Vault outputs
+output keyVaultId string = keyvault.outputs.keyVaultId
+output keyVaultUri string = keyvault.outputs.keyVaultUri

@@ -73,3 +73,8 @@ resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/container
     }
   }
 }
+
+output endpoint string = account.properties.documentEndpoint
+output dbName string = database.name
+output containerName string = container.name
+output primaryConnectionString string = account.listConnectionStrings().connectionStrings[0].connectionString

@@ -1,7 +1,6 @@
 targetScope = 'resourceGroup'
 
 param keyVaultName string
-param adminUserId string
 param mangedIdentityId string
 param tags object = {}
 

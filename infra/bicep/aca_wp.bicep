@@ -29,4 +29,5 @@ resource aca_workspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
 }
 
 output workspaceId string = aca_workspace.properties.customerId
+output workspaceName string = aca_workspace.name
 output workspaceKey string =  listKeys(aca_workspace.id, '2023-09-01').primarySharedKey
