@@ -13,7 +13,7 @@ echo "adminUserId: $adminUserId"
 # Set the prefix for all resources
 echo "Setting the prefix for all resources..."
 prefix="ecolab"
-echo
+echo "prefix: $prefix"
 
 # Set the deployment name
 echo "Setting the deployment name..."
