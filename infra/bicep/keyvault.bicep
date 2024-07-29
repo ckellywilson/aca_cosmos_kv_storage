@@ -2,6 +2,7 @@ targetScope = 'resourceGroup'
 
 param keyVaultName string
 param mangedIdentityId string
+param adminUserId string
 param tags object = {}
 
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
@@ -15,21 +16,15 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
     }
     tenantId: subscription().tenantId
     accessPolicies: [
-      // {
-      //   objectId: adminUserId
-      //   tenantId: subscription().tenantId
-      //   permissions: {
-      //     keys: [
-      //       'all'
-      //     ]
-      //     secrets: [
-      //       'all'
-      //     ]
-      //     certificates: [
-      //       'all'
-      //     ]
-      //   }
-      // }
+      {
+        objectId: adminUserId
+        tenantId: subscription().tenantId
+        permissions: {
+          keys: ['all']
+          secrets: ['all']
+          certificates: ['all']
+        }
+      }
       {
         objectId: mangedIdentityId
         tenantId: subscription().tenantId

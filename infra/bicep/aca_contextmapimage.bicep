@@ -10,7 +10,7 @@ param workspaceId string
 param tags object = {}
 
 @description('User-assigned identity for the container app')
-param identityId string
+param userManagedIdentityId string
 
 @description('Azure Container Registry for the container app')
 param azureContainerRegistry string
@@ -21,7 +21,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${identityId}': {}
+      '${userManagedIdentityId}': {}
     }
   }
   tags: tags
@@ -34,7 +34,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
       registries: [
         {
           server: '${azureContainerRegistry}.azurecr.io'
-          identity: identityId
+          identity: userManagedIdentityId
         }
       ]
       secrets: [

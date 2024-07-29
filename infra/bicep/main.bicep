@@ -124,19 +124,33 @@ module aca_env './aca_env.bicep' = {
   }
 }
 
+module keyvault './keyvault.bicep' = {
+  name: '${prefix}keyvault'
+  scope: rg
+  params: {
+    keyVaultName: 'ecoacakeyvault092899'
+    tags: tags
+    mangedIdentityId: user_identity.outputs.principalId
+    adminUserId: adminUserId
+  }
+}
+
 // THIS IMAGE WILL BE DEPLOYED FROM THE APPLICATION REPOSITORY
-// module aca_contextdiagram './aca_contextdiagram.bicep' = {
-//   name: '${prefix}-aca-contextdiagram'
-//   scope: rg
-//   params: {
-//     prefix: prefix
-//     workspaceId: aca_env.outputs.environmentId
-//     tags: tags
-//     identityId: user_identity.outputs.identityId
-//     azureContainerRegistry: acr.outputs.acrName
-//     userManagedIdentityId: user_identity.outputs.clientId
-//   }
-// }
+module aca_contextdiagram './aca_contextdiagram.bicep' = {
+  name: '${prefix}-aca-contextdiagram'
+  scope: rg
+  params: {
+    prefix: prefix
+    workspaceId: aca_env.outputs.environmentId
+    tags: tags
+    identityId: user_identity.outputs.identityId
+    managedIdentityResourceId: resourceId(subscription().id, rg.name, 'Microsoft.ManagedIdentity/userAssignedIdentities', user_identity.outputs.identityName))
+    // managedIdentityResourceId: '/subscriptions/494116cb-e794-4266-98e5-61c178d62cb4/resourcegroups/ecolab-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ecolab-user-identity'
+    azureContainerRegistry: acr.outputs.acrName
+    userManagedIdentityId: user_identity.outputs.clientId
+    keyVaultUrl: keyvault.outputs.keyVaultUri
+  }
+}
 
 // THIS IMAGE WILL BE DEPLOYED FROM THE APPLICATION REPOSITORY
 // module aca_contextmapimage './aca_contextmapimage.bicep' = {
@@ -146,7 +160,7 @@ module aca_env './aca_env.bicep' = {
 //     prefix: prefix
 //     workspaceId: aca_env.outputs.environmentId
 //     tags: tags
-//     identityId: user_identity.outputs.identityId
+//     userManagedIdentityId: user_identity.outputs.clientId
 //     azureContainerRegistry: acr.outputs.acrName
 //   }
 // }
@@ -160,16 +174,6 @@ module cosmosdb './cosmosdb.bicep' = {
     location: location
     databaseName: 'Context'
     containerName: 'ContextDiagram'
-  }
-}
-
-module keyvault './keyvault.bicep' = {
-  name: '${prefix}keyvault'
-  scope: rg
-  params: {
-    keyVaultName: 'ecoacakeyvault092899'
-    tags: tags
-    mangedIdentityId: user_identity.outputs.principalId
   }
 }
 
@@ -194,3 +198,9 @@ output cosmosPrimaryConnectionString string = cosmosdb.outputs.primaryConnection
 // Key Vault outputs
 output keyVaultId string = keyvault.outputs.keyVaultId
 output keyVaultUri string = keyvault.outputs.keyVaultUri
+
+// User Identity outputs
+output userManagedIdentityId string = user_identity.outputs.clientId
+output userManagedIdentityPrincipalId string = user_identity.outputs.principalId
+output managedIdentityResourceId string = '/subscriptions/${subscription().id}/resourceGroups/${rg.name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${user_identity.name}'
+
