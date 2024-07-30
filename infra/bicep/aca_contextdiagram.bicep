@@ -15,9 +15,6 @@ param identityId string
 @description('Resource Id of Managed Identity')
 param managedIdentityResourceId string
 
-@description('User Manged Identity Id')
-param userManagedIdentityId string
-
 @description('Azure Container Registry for the container app')
 param azureContainerRegistry string
 

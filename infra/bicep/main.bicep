@@ -121,7 +121,7 @@ module aca_env './aca_env.bicep' = {
     prefix: prefix
     tags: tags
     logAnalyticsWorkspaceId: aca_wp.outputs.workspaceId
-    logAnalyticsSharedKey: aca_wp.outputs.workspaceKey
+    logAnalyticsWorkspaceName: aca_wp.outputs.workspaceName
   }
 }
 
@@ -134,7 +134,8 @@ module keyvault './keyvault.bicep' = {
     mangedIdentityId: user_identity.outputs.principalId
     adminUserId: adminUserId
     cosmosDbConnectionStringKey: cosmosConnectionStringKey
-    cosmosDbConnectionString: cosmosdb.outputs.primaryConnectionString
+    cosmosDbAccountName: cosmosdb.outputs.accountName
+
   }
 }
 
@@ -147,10 +148,8 @@ module aca_contextdiagram './aca_contextdiagram.bicep' = {
     workspaceId: aca_env.outputs.environmentId
     tags: tags
     identityId: user_identity.outputs.identityId
-    // managedIdentityResourceId: resourceId(rg.name,'Microsoft.ManagedIdentity/userAssignedIdentities', user_identity.outputs.identityName)
-    managedIdentityResourceId: '/subscriptions/494116cb-e794-4266-98e5-61c178d62cb4/resourcegroups/ecolab-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ecolab-user-identity'
+    managedIdentityResourceId: '${subscription().id}/resourcegroups/${rg.name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${user_identity.outputs.identityName}'
     azureContainerRegistry: acr.outputs.acrName
-    userManagedIdentityId: user_identity.outputs.clientId
     keyVaultUrl: keyvault.outputs.keyVaultUri
     cosmosConnectionStringKey: cosmosConnectionStringKey
   }
@@ -164,7 +163,7 @@ module aca_contextdiagram './aca_contextdiagram.bicep' = {
 //     prefix: prefix
 //     workspaceId: aca_env.outputs.environmentId
 //     tags: tags
-//     userManagedIdentityId: user_identity.outputs.clientId
+//     managedIdentityResourceId: '/subscriptions/494116cb-e794-4266-98e5-61c178d62cb4/resourcegroups/ecolab-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ecolab-user-identity'
 //     azureContainerRegistry: acr.outputs.acrName
 //   }
 // }
@@ -197,7 +196,6 @@ output appInsightsConnectionString string = appInsights.outputs.appInsightsConne
 // Cosmos DB outputs
 output cosmosContainerName string = cosmosdb.outputs.containerName
 output cosmosDbEndpoint string = cosmosdb.outputs.endpoint
-output cosmosPrimaryConnectionString string = cosmosdb.outputs.primaryConnectionString
 
 // Key Vault outputs
 output keyVaultId string = keyvault.outputs.keyVaultId
@@ -206,5 +204,4 @@ output keyVaultUri string = keyvault.outputs.keyVaultUri
 // User Identity outputs
 output userManagedIdentityId string = user_identity.outputs.clientId
 output userManagedIdentityPrincipalId string = user_identity.outputs.principalId
-output managedIdentityResourceId string = '/subscriptions/${subscription().id}/resourceGroups/${rg.name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${user_identity.name}'
 

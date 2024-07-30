@@ -9,8 +9,8 @@ param workspaceId string
 @description('Tags for all resources')
 param tags object = {}
 
-@description('User-assigned identity for the container app')
-param userManagedIdentityId string
+@description('Resource Id of Managed Identity')
+param managedIdentityResourceId string
 
 @description('Azure Container Registry for the container app')
 param azureContainerRegistry string
@@ -39,8 +39,9 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
       ]
       secrets: [
         {
+            keyVaultUrl: '${keyVaultUrl}secrets/${cosmosConnectionStringKey}'
+            identity: managedIdentityResourceId
             name: 'azure-client-secret'
-            value: '<your-client-secret>'
         }]
     }
     environmentId: workspaceId

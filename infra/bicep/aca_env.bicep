@@ -11,7 +11,11 @@ param tags object = {}
 param logAnalyticsWorkspaceId string
 
 @description('Log Analytics Shared Key for the container app')
-param logAnalyticsSharedKey string
+param logAnalyticsWorkspaceName string
+
+resource aca_workspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' existing = {
+  name: logAnalyticsWorkspaceName
+}
 
 resource aca_env 'Microsoft.App/managedEnvironments@2024-03-01' = {
   name: '${prefix}-aca-env'
@@ -22,7 +26,7 @@ resource aca_env 'Microsoft.App/managedEnvironments@2024-03-01' = {
       destination: 'log-analytics'
       logAnalyticsConfiguration: {
         customerId: logAnalyticsWorkspaceId
-        sharedKey: logAnalyticsSharedKey
+        sharedKey: listKeys(aca_workspace.id, '2023-09-01').primarySharedKey
       }
     }
     zoneRedundant: false
