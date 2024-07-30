@@ -140,20 +140,20 @@ module keyvault './keyvault.bicep' = {
 }
 
 // THIS IMAGE WILL BE DEPLOYED FROM THE APPLICATION REPOSITORY
-module aca_contextdiagram './aca_contextdiagram.bicep' = {
-  name: '${prefix}-aca-contextdiagram'
-  scope: rg
-  params: {
-    prefix: prefix
-    workspaceId: aca_env.outputs.environmentId
-    tags: tags
-    identityId: user_identity.outputs.identityId
-    managedIdentityResourceId: '${subscription().id}/resourcegroups/${rg.name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${user_identity.outputs.identityName}'
-    azureContainerRegistry: acr.outputs.acrName
-    keyVaultUrl: keyvault.outputs.keyVaultUri
-    cosmosConnectionStringKey: cosmosConnectionStringKey
-  }
-}
+// module aca_contextdiagram './aca_contextdiagram.bicep' = {
+//   name: '${prefix}-aca-contextdiagram'
+//   scope: rg
+//   params: {
+//     prefix: prefix
+//     workspaceId: aca_env.outputs.environmentId
+//     tags: tags
+//     identityId: user_identity.outputs.identityId
+//     managedIdentityResourceId: '${subscription().id}/resourcegroups/${rg.name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${user_identity.outputs.identityName}'
+//     azureContainerRegistry: acr.outputs.acrName
+//     keyVaultUrl: keyvault.outputs.keyVaultUri
+//     cosmosConnectionStringKey: cosmosConnectionStringKey
+//   }
+// }
 
 // THIS IMAGE WILL BE DEPLOYED FROM THE APPLICATION REPOSITORY
 // module aca_contextmapimage './aca_contextmapimage.bicep' = {
