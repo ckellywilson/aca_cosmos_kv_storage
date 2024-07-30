@@ -8,6 +8,7 @@ param tags object = {}
 
 // variables
 var resourceGroupName = '${prefix}-rg'
+var cosmosConnectionStringKey = 'cosmosconnectionstring'
 
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: resourceGroupName
@@ -132,6 +133,8 @@ module keyvault './keyvault.bicep' = {
     tags: tags
     mangedIdentityId: user_identity.outputs.principalId
     adminUserId: adminUserId
+    cosmosDbConnectionStringKey: cosmosConnectionStringKey
+    cosmosDbConnectionString: cosmosdb.outputs.primaryConnectionString
   }
 }
 
@@ -144,11 +147,12 @@ module aca_contextdiagram './aca_contextdiagram.bicep' = {
     workspaceId: aca_env.outputs.environmentId
     tags: tags
     identityId: user_identity.outputs.identityId
-    managedIdentityResourceId: resourceId(subscription().id, rg.name, 'Microsoft.ManagedIdentity/userAssignedIdentities', user_identity.outputs.identityName))
-    // managedIdentityResourceId: '/subscriptions/494116cb-e794-4266-98e5-61c178d62cb4/resourcegroups/ecolab-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ecolab-user-identity'
+    // managedIdentityResourceId: resourceId(rg.name,'Microsoft.ManagedIdentity/userAssignedIdentities', user_identity.outputs.identityName)
+    managedIdentityResourceId: '/subscriptions/494116cb-e794-4266-98e5-61c178d62cb4/resourcegroups/ecolab-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ecolab-user-identity'
     azureContainerRegistry: acr.outputs.acrName
     userManagedIdentityId: user_identity.outputs.clientId
     keyVaultUrl: keyvault.outputs.keyVaultUri
+    cosmosConnectionStringKey: cosmosConnectionStringKey
   }
 }
 

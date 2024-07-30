@@ -9,7 +9,7 @@ resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-07-31-p
   tags: tags
 }
 
-output identityName = identity.name
+output identityName string = identity.name
 output principalId string = identity.properties.principalId
 output clientId string = identity.properties.clientId
 output identityId string = identity.id

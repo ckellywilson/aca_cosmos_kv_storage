@@ -24,6 +24,9 @@ param azureContainerRegistry string
 @description('Keyvault Url')
 param keyVaultUrl string
 
+@description('CosmosDb Connection String Key')
+param cosmosConnectionStringKey string
+
 resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
   name: '${prefix}-contextdiagram'
   location: resourceGroup().location
@@ -48,10 +51,9 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
       ]
       secrets: [
         {
-            keyVaultUrl: 'https://ecoacakeyvault092899.vault.azure.net/secrets/cosmosconnectionstring'
+            keyVaultUrl: '${keyVaultUrl}secrets/${cosmosConnectionStringKey}'
             identity: managedIdentityResourceId 
-            name: 'cosmosconnectionstring'
-            // value: 'AccountEndpoint=https://ecolab-cosmos.documents.azure.com:443/;AccountKey=It6l6iaCaolrMGHetcehYcvEDLnhTV35BizEWCe22UVBKInUw9setdme8tNzkv8JUqUu7bVudiR9ACDb3cpVUg==;'
+            name: cosmosConnectionStringKey         
         }
       ]
     }
@@ -64,7 +66,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
           env: [
             {
               name: 'COSMOS_CONNECTION_STRING'
-              secretRef: 'cosmosconnectionstring'
+              secretRef: cosmosConnectionStringKey
             }
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
