@@ -21,6 +21,11 @@ Write-Host "Setting the deployment name..."
 $deploymentName="${prefix}-deployment"
 Write-Host "deploymentName: $deploymentName"
 
+# Set the app registration name
+Write-Host "Setting the app registration name..."
+$appRegistrationName="${prefix}-contextmapimage-sp"
+Write-Host "appRegistrationName: $appRegistrationName"
+
 # Set the location
 Write-Host "Setting the location..."
 $location="centralus"
@@ -42,5 +47,6 @@ az deployment sub show --name $deploymentName --query "properties.outputs"
 
 # create app registration for rbac
 Write-Host "Creating app registration for rbac..."
-az ad sp create-for-rbac --name "${prefix}-aks-sp" -o json | Out-File creds.json
-write-host "App registration created successfully."
+$appRegistrationSecret=$(az ad sp create-for-rbac --name $appRegistrationName --query "password" --output tsv)
+Write-Host "App registration created successfully."
+Write-Host "appRegistrationSecret: "$appRegistrationSecret
