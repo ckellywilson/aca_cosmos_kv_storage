@@ -21,9 +21,9 @@ Write-Host "Setting the deployment name..."
 $deploymentName="${prefix}-deployment"
 Write-Host "deploymentName: $deploymentName"
 
-# Set the app registration name
-Write-Host "Setting the app registration name..."
-$appRegistrationName="${prefix}-contextmapimage-sp"
+# Set the app registration name variable
+Write-Host "Setting the app registration name variable..."
+$appRegistrationName="contextmapimage"
 Write-Host "appRegistrationName: $appRegistrationName"
 
 # Set the location
@@ -44,9 +44,19 @@ Write-Host "Deployment completed successfully."
 # show the outputs
 Write-Host "Showing the outputs..."
 az deployment sub show --name $deploymentName --query "properties.outputs"
+Write-Host "Deployment completed successfully."
 
-# create app registration for rbac
-Write-Host "Creating app registration for rbac..."
+# Get key vault name
+Write-Host "Getting key vault name..."
+$keyVaultName=$(az deployment sub show --name $deploymentName --query "properties.outputs.keyVaultName.value" --output tsv)
+Write-Host "keyVaultName: $keyVaultName"
+
+# create app registration $appRegistrationName for rbac
+Write-Host "Creating app registration for RBAC for "$appRegistrationName
 $appRegistrationSecret=$(az ad sp create-for-rbac --name $appRegistrationName --query "password" --output tsv)
 Write-Host "App registration created successfully."
 Write-Host "appRegistrationSecret: "$appRegistrationSecret
+
+# add app registration secret to key vault
+Write-Host "Adding app registration secret to key vault..."
+az keyvault secret set --vault-name $keyVaultName --name $appRegistrationName"secret" --value $appRegistrationSecret
