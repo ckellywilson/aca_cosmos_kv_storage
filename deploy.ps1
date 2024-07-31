@@ -31,15 +31,15 @@ Write-Host "Setting the location..."
 $location="centralus"
 Write-Host "location: $location"
 
-# Deploy AKS cluster using Bicep template
-Write-Host "Deploying AKS cluster using Bicep template..."
+# Deploy all resources except container apps
+Write-Host "Deploy all resources except container apps..."
 az deployment sub create --name $deploymentName `
     --location $location `
-    --parameters ./infra/bicep/main.bicepparam `
     --parameters prefix="$prefix" `
     --parameters adminUserId="$adminUserId" `
+    --parameters ./infra/bicep/main.bicepparam `
     --template-file ./infra/bicep/main.bicep
-Write-Host "Deployment completed successfully."
+Write-Host "Deployment of resources except container apps successful."
 
 # show the outputs
 Write-Host "Showing the outputs..."
@@ -60,3 +60,26 @@ Write-Host "appRegistrationSecret: "$appRegistrationSecret
 # add app registration secret to key vault
 Write-Host "Adding app registration secret to key vault..."
 az keyvault secret set --vault-name $keyVaultName --name $appRegistrationName"secret" --value $appRegistrationSecret
+
+# Build contextdiagram and push to ACR
+Write-Host "Building contextdiagram and pushing to ACR..."
+
+# Change directory to contextdiagram
+Write-Host "Changing directory to contextdiagram..."
+Set-Location .\src\contextdiagram
+.\push_to_acr.ps1
+
+
+# Change directory back to root
+Write-Host "Changing directory back to root..."
+Set-Location ..\..\
+
+# Deploy container apps
+Write-Host "Deploy container apps..."
+az deployment sub create --name $deploymentName `
+    --location $location `
+    --parameters prefix="$prefix" `
+    --parameters adminUserId="$adminUserId" `
+    --parameters ./infra/bicep/main_aca.bicepparam `
+    --template-file ./infra/bicep/main_aca.bicep
+Write-Host "Deployment of container apps successful."
