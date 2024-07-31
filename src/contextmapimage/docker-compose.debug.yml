@@ -14,9 +14,10 @@ services:
     ports:
       - 5125:5125
     environment:
-    - "AZURE_CLIENT_ID=<your_client_id>"
-    - "AZURE_TENANT_ID=<your_tenant_id>"
-    - "AZURE_CLIENT_SECRET=<your_secret>"
-    - "BLOB_STORAGE_URL=<your_blob_storage_url>"
+    - "AZURE_CLIENT_ID=<client-id>"
+    - "AZURE_TENANT_ID=<tenant-id>"
+    - "AZURE_CLIENT_SECRET=<client-secret>"
+    - "BLOB_STORAGE_URL=<blob-storage-url-wo-trailing-slash>"
+    - "ASPNETCORE_ENVIRONMENT=Development"
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
