@@ -183,7 +183,6 @@ module cosmosdb './cosmosdb.bicep' = {
 // resource general outputs
 output rgName string = rg.name
 output storageAccountName string = storage.outputs.storageAccountName
-output acrName string = acr.outputs.acrName
 output keyVaultName string = keyvault.outputs.keyVaultName
 output cosmosDbName string = cosmosdb.outputs.dbName
 
@@ -205,3 +204,13 @@ output keyVaultUri string = keyvault.outputs.keyVaultUri
 output userManagedIdentityId string = user_identity.outputs.clientId
 output userManagedIdentityPrincipalId string = user_identity.outputs.principalId
 
+// ACR outputs
+output acrName string = acr.outputs.acrName
+output acrLoginServer string = acr.outputs.loginServer
+
+// Storage outputs
+output storageName string = storage.outputs.storageAccountName
+
+// Log Analytics Workspace outputs
+output logAnalyticsWorkspaceId string = aca_wp.outputs.workspaceId
+output logAnalyticsWorkspaceName string = aca_wp.outputs.workspaceName
