@@ -151,37 +151,31 @@ module cosmosdb './cosmosdb.bicep' = {
   }
 }
 
-// resource general outputs
-output rgName string = rg.name
-output storageAccountName string = storage.outputs.storageAccountName
-output keyVaultName string = keyvault.outputs.keyVaultName
-output cosmosDbName string = cosmosdb.outputs.dbName
+// UNCOMMENT THIS AFTER IMAGES HAVE BEEN PUSHED TO REGISTRY
+module aca_contextdiagram './aca_contextdiagram.bicep' = {
+  name: '${prefix}-aca-contextdiagram'
+  scope: rg
+  params: {
+    prefix: prefix
+    workspaceId: aca_env.outputs.environmentId
+    tags: tags
+    identityId: user_identity.outputs.identityId
+    managedIdentityResourceId: '${subscription().id}/resourcegroups/${rg.name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${user_identity.outputs.identityName}'
+    azureContainerRegistry: acr.outputs.acrName
+    keyVaultUrl: keyvault.outputs.keyVaultUri
+    cosmosConnectionStringKey: cosmosConnectionStringKey
+  }
+}
 
-// App Insights outputs
-output appInsightsId string = appInsights.outputs.appInsightsId
-output appInsightsName string = appInsights.outputs.appInsightsName
-output appInsightsInstrumentationKey string = appInsights.outputs.appInsightsInstrumentationKey
-output appInsightsConnectionString string = appInsights.outputs.appInsightsConnectionString
-
-// Cosmos DB outputs
-output cosmosContainerName string = cosmosdb.outputs.containerName
-output cosmosDbEndpoint string = cosmosdb.outputs.endpoint
-
-// Key Vault outputs
-output keyVaultId string = keyvault.outputs.keyVaultId
-output keyVaultUri string = keyvault.outputs.keyVaultUri
-
-// User Identity outputs
-output userManagedIdentityId string = user_identity.outputs.clientId
-output userManagedIdentityPrincipalId string = user_identity.outputs.principalId
-
-// ACR outputs
-output acrName string = acr.outputs.acrName
-output acrLoginServer string = acr.outputs.loginServer
-
-// Storage outputs
-output storageName string = storage.outputs.storageAccountName
-
-// Log Analytics Workspace outputs
-output logAnalyticsWorkspaceId string = aca_wp.outputs.workspaceId
-output logAnalyticsWorkspaceName string = aca_wp.outputs.workspaceName
+// UNCOMMENT THIS AFTER IMAGES HAVE BEEN PUSHED TO REGISTRY
+// module aca_contextmapimage './aca_contextmapimage.bicep' = {
+//   name: '${prefix}-aca-contextmapimage'
+//   scope: rg
+//   params: {
+//     prefix: prefix
+//     workspaceId: aca_env.outputs.environmentId
+//     tags: tags
+//     managedIdentityResourceId: '/subscriptions/494116cb-e794-4266-98e5-61c178d62cb4/resourcegroups/ecolab-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ecolab-user-identity'
+//     azureContainerRegistry: acr.outputs.acrName
+//   }
+// }
