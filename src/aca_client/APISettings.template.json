@@ -1,0 +1,6 @@
+{
+  "APISettings": {
+    "contextdiagramAPIEndpoint": "<context-diagram-API-Endpoint>",
+    "contextmapimageAPIEndpoint": "<content-map-image-API-Endpoint>"
+  }
+}
