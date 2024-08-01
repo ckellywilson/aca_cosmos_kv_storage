@@ -44,7 +44,7 @@ namespace aca_client.Services
 
             foreach (var item in items)
             {
-                using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_apiEndpoint}/api/contextitems"))
+                using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_apiEndpoint}api/contextitems"))
                 {
                     request.Content = JsonContent.Create(item);
                     var response = await _client.SendAsync(request);

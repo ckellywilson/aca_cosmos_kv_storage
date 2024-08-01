@@ -19,6 +19,8 @@ internal class Program
             await service.Execute();
         }
 
+
+
         Console.WriteLine("Press any key to continue...");
         Console.ReadLine();
     }
@@ -54,10 +56,15 @@ internal class Program
             throw new NullReferenceException("Environment variable contextmapimageAPIEndpoint not found"),
             new HttpClient(),contextDiagramAddService.Containers);
 
+        var contextMapImageGetService = new ContextMapImageGetService(Environment.GetEnvironmentVariable("contextmapimageAPIEndpoint") ??
+            throw new NullReferenceException("Environment variable contextmapimageAPIEndpoint not found"),
+            new HttpClient());
+
         IEnumerable<IAPIService> services = new List<IAPIService>
         {
-            contextDiagramAddService,
-            contextMapImageAddService
+            //contextDiagramAddService,
+            //contextMapImageAddService,
+            contextMapImageGetService
         };
 
         return Task.FromResult(services);
