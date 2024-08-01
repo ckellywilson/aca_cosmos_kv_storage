@@ -15,6 +15,9 @@ builder.Services.AddSingleton<BlobServiceClient>(x =>
     string blobContainerUrl = Environment.GetEnvironmentVariable("BLOB_STORAGE_URL") ??
             throw new ArgumentNullException("BLOB_STORAGE_URL is not set");
 
+    if (blobContainerUrl.EndsWith("/"))
+        blobContainerUrl = blobContainerUrl.Substring(0, blobContainerUrl.Length - 1);
+
     return new BlobServiceClient(new Uri(blobContainerUrl), new DefaultAzureCredential());
 });
 builder.Services.AddTransient<IBlobStorageService, AzureBlobStoreService>();
