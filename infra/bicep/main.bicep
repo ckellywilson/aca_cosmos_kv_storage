@@ -9,6 +9,7 @@ param tags object = {}
 // variables
 var resourceGroupName = '${prefix}-rg'
 var cosmosConnectionStringKey = 'cosmosconnectionstring'
+var blobStorageUrlKey= 'blobstorageurl'
 
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: resourceGroupName
@@ -135,6 +136,8 @@ module keyvault './keyvault.bicep' = {
     adminUserId: adminUserId
     cosmosDbConnectionStringKey: cosmosConnectionStringKey
     cosmosDbAccountName: cosmosdb.outputs.accountName
+    blobStorageUrlKey: blobStorageUrlKey
+    storageAccountName: storage.outputs.storageAccountName
 
   }
 }

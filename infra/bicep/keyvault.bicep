@@ -10,15 +10,21 @@ param tags object = {}
 @description('Name of the CosmosDB Connection string key')
 param cosmosDbConnectionStringKey string
 
-// @description('Value of the CosmosDB Connection string key')
-// @secure()
-// param cosmosDbConnectionString string
-
 @description('Name of the CosmosDB account instance')
 param cosmosDbAccountName string
 
+@description('Name of the Blob Store Url Key')
+param blobStorageUrlKey string
+
+@description('Name of the storage account')
+param storageAccountName string
+
 resource account 'Microsoft.DocumentDb/databaseAccounts@2024-05-15-preview' existing = {
   name: cosmosDbAccountName
+}
+
+resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' existing = {
+  name: storageAccountName
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
@@ -59,6 +65,14 @@ resource cosmosDbConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-
   name: cosmosDbConnectionStringKey
   properties: {
 	value: account.listConnectionStrings().connectionStrings[0].connectionString
+  }
+}
+
+resource blogStorageUrlSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: blobStorageUrlKey
+  properties: {
+	value: storageAccount.properties.primaryEndpoints.blob
   }
 }
 

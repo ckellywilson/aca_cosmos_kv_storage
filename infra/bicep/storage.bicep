@@ -101,3 +101,4 @@ resource Microsoft_Storage_storageAccounts_fileservices_storageAccountName_defau
 }
 
 output storageAccountName string = storageAccount.name
+output blobStorageUrl string = storageAccount.properties.primaryEndpoints.blob
