@@ -24,6 +24,9 @@ param keyVaultUrl string
 @description('CosmosDb Connection String Key')
 param cosmosConnectionStringKey string
 
+@description('Application Insights Connection String')
+param appInsightsConnectionString string
+
 resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
   name: '${prefix}-contextdiagram'
   location: resourceGroup().location
@@ -67,7 +70,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
             }
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-              value: 'InstrumentationKey=f9446849-e80d-4f3c-85bf-37633a6f3686;IngestionEndpoint=https://centralus-0.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/;ApplicationId=a89c130c-a790-47a3-9ff9-1b1587e97ba2'
+              value: appInsightsConnectionString
             }
           ]
           resources: {

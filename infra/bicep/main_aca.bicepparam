@@ -6,4 +6,5 @@ param tags = {
   environment: prefix
 }
 param adminUserId = ''
+param azureClientId = ''
 

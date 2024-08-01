@@ -61,6 +61,11 @@ Write-Host "appRegistrationSecret: "$appRegistrationSecret
 Write-Host "Adding app registration secret to key vault..."
 az keyvault secret set --vault-name $keyVaultName --name $appRegistrationName"secret" --value $appRegistrationSecret
 
+# Get the app registration client id
+Write-Host "Getting the app registration client id..."
+$azureClientId=$(az ad sp list --all --query "[?displayName=='$appRegistrationName'].appId" --output tsv)
+Write-Host "appRegistrationClientId: $appRegistrationClientId"
+
 # Build contextdiagram and push to ACR
 Write-Host "Building contextdiagram and pushing to ACR..."
 
@@ -86,6 +91,7 @@ az deployment sub create --name $deploymentName `
     --location $location `
     --parameters prefix="$prefix" `
     --parameters adminUserId="$adminUserId" `
+    --parameters azureClientId="$azureClientId" `
     --parameters ./infra/bicep/main_aca.bicepparam `
     --template-file ./infra/bicep/main_aca.bicep
 

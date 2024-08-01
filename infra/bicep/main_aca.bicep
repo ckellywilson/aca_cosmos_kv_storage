@@ -5,11 +5,13 @@ param adminUserId string
 param prefix string = ''
 param location string = ''
 param tags object = {}
+param azureClientId string
 
 // variables
 var resourceGroupName = '${prefix}-rg'
 var cosmosConnectionStringKey = 'cosmosconnectionstring'
 var blobStorageUrlKey= 'blobstorageurl'
+var contextMapImageSecretKey = 'contextmapimagesecret'
 
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: resourceGroupName
@@ -166,6 +168,7 @@ module aca_contextdiagram './aca_contextdiagram.bicep' = {
     azureContainerRegistry: acr.outputs.acrName
     keyVaultUrl: keyvault.outputs.keyVaultUri
     cosmosConnectionStringKey: cosmosConnectionStringKey
+    appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
   }
 }
 
@@ -182,6 +185,10 @@ module aca_contextmapimage './aca_contextmapimage.bicep' = {
     azureContainerRegistry: acr.outputs.acrName
     keyVaultUrl: keyvault.outputs.keyVaultUri
     blobStorageUrlKey: blobStorageUrlKey
+    contextMapImageSecretKey: contextMapImageSecretKey
+    appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
+    azureClientId: azureClientId
+    azureTenantId: subscription().tenantId
   }
 }
 
