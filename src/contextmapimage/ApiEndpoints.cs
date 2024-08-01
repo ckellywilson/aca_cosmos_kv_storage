@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Storage.Blobs.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace contextmapimage;
 
@@ -9,6 +10,12 @@ public static class ApiEndpoints
         endpoints.MapGet("/health", () =>
         {
             return Results.Ok("Healthy");
+        });
+
+        endpoints.MapGet("/api/containers", async ([FromServices] IBlobStorageService blobStorageService) =>
+        {
+            var containers = await blobStorageService.GetContainersAsync();
+            return Results.Ok(containers);
         });
 
         endpoints.MapPost("/api/containers", async ([FromServices] IBlobStorageService blobStorageService, [FromBody] string containerName) =>
