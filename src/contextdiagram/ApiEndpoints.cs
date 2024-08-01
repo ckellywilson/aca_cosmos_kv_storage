@@ -13,7 +13,7 @@ public static class ApiEndpoints
             return Results.Ok("Healthy");
         });
 
-        endpoints.MapPost("/contextdiagrams", async (ContextDiagram contextDiagram, IContextDiagramService service) =>
+        endpoints.MapPost("/contextitems", async (ContextItem contextDiagram, IContextDiagramService service) =>
         {
             try
             {
@@ -31,11 +31,24 @@ public static class ApiEndpoints
             return Results.Created($"/contextdiagrams/{contextDiagram.id}", contextDiagram);
         });
 
-        endpoints.MapGet("/contextdiagrams/{id}", async (string id, IContextDiagramService service) =>
+        endpoints.MapGet("/contextitems/{id}", async (string id, IContextDiagramService service) =>
         {
             try
             {
                 var contextDiagram = await service.GetContextDiagramAsync(id);
+                return Results.Ok(contextDiagram);
+            }
+            catch (KeyNotFoundException)
+            {
+                return Results.NotFound();
+            }
+        });
+
+        endpoints.MapGet("/contextitems", async (IContextDiagramService service) =>
+        {
+            try
+            {
+                var contextDiagram = await service.GetContextDiagramsAsync();
                 return Results.Ok(contextDiagram);
             }
             catch (KeyNotFoundException)

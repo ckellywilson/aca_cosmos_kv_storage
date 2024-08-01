@@ -14,7 +14,7 @@ namespace contextdiagram.Services
             _client = client;
         }
 
-        public async Task AddContextDiagramAsync(ContextDiagram contextDiagram)
+        public async Task AddContextDiagramAsync(ContextItem contextDiagram)
         {
             var container = _client.GetContainer(_database, _container);
             try
@@ -31,18 +31,49 @@ namespace contextdiagram.Services
             }
         }
 
-        public async Task<ContextDiagram> GetContextDiagramAsync(string id)
+        public async Task<ContextItem> GetContextDiagramAsync(string id)
         {
             var container = _client.GetContainer(_database, _container);
             try
             {
-                var response = await container.ReadItemAsync<ContextDiagram>(id, new PartitionKey(id));
+                var response = await container.ReadItemAsync<ContextItem>(id, new PartitionKey(id));
                 return response.Resource;
             }
             catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 throw new KeyNotFoundException();
             }
+        }
+
+        public async Task<IEnumerable<ContextItem>> GetContextDiagramsAsync()
+        {
+            var container = _client.GetContainer(_database, _container);
+            var contextItems = new List<ContextItem>();
+
+            try
+            {
+                using FeedIterator<ContextItem> feed = container.GetItemQueryIterator<ContextItem>(
+                    queryText: "SELECT * FROM ContextItem"
+);
+
+                // Iterate query result pages
+                while (feed.HasMoreResults)
+                {
+                    FeedResponse<ContextItem> response = await feed.ReadNextAsync();
+
+                    // Iterate query results
+                    foreach (ContextItem item in response)
+                    {
+                        contextItems.Add(item);
+                    }
+                }
+            }
+            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            return contextItems;
         }
     }
 }

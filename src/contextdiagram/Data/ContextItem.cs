@@ -1,4 +1,4 @@
-public class ContextDiagram
+public class ContextItem
 {
     public string? id { get; set; }
 

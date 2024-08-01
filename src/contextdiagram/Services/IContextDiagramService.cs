@@ -1,5 +1,6 @@
 public interface IContextDiagramService
 {
-    Task<ContextDiagram> GetContextDiagramAsync(string id);
-    Task AddContextDiagramAsync(ContextDiagram contextDiagram);
+    Task<IEnumerable<ContextItem>> GetContextDiagramsAsync();
+    Task<ContextItem> GetContextDiagramAsync(string id);
+    Task AddContextDiagramAsync(ContextItem contextDiagram);
 }
