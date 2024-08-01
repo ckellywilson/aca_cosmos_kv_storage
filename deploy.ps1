@@ -69,6 +69,11 @@ Write-Host "Changing directory to contextdiagram..."
 Set-Location .\src\contextdiagram
 .\push_to_acr.ps1
 
+# Change directory to contextmapimage
+Write-Host "Changing directory to contextmapimage..."
+Set-Location ..\contextmapimage
+.\push_to_acr.ps1
+
 
 # Change directory back to root
 Write-Host "Changing directory back to root..."
@@ -76,10 +81,12 @@ Set-Location ..\..\
 
 # Deploy container apps
 Write-Host "Deploy container apps..."
+
 az deployment sub create --name $deploymentName `
     --location $location `
     --parameters prefix="$prefix" `
     --parameters adminUserId="$adminUserId" `
     --parameters ./infra/bicep/main_aca.bicepparam `
     --template-file ./infra/bicep/main_aca.bicep
+
 Write-Host "Deployment of container apps successful."
