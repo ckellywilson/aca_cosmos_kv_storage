@@ -1,40 +1,41 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
-	"name": "C# (.NET)",
+	"name": "Ubuntu",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0-bookworm",
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/azure-cli:1": {
 			"installBicep": true,
 			"version": "latest"
 		},
+		"ghcr.io/devcontainers/features/powershell:1": {},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
 			"installDockerBuildx": false,
 			"installDockerComposeSwitch": true,
 			"version": "latest",
 			"dockerDashComposeVersion": "latest"
+		},
+		"ghcr.io/devcontainers/features/dotnet:2": {
+			"version": "latest",
+			"workloads": "aspire"
 		}
 	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"ms-dotnettools.vscodeintellicode-csharp",
-				"GitHub.copilot"
+				"GitHub.copilot",
+				"ms-azuretools.vscode-bicep",
+				"ms-dotnettools.csdevkit",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	}
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [5000, 5001],
-	// "portsAttributes": {
-	//		"5001": {
-	//			"protocol": "https"
-	//		}
-	// }
+	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "dotnet restore",
+	// "postCreateCommand": "uname -a",
 	// Configure tool-specific properties.
 	// "customizations": {},
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
